@@ -32,8 +32,18 @@ defmodule ReqLLM.OpenTelemetry.Attributes do
   alias ReqLLM.OpenTelemetry.SemConv
   alias ReqLLM.Response
 
-  @cache_read_keys [:cached_input, :cache_read_input_tokens]
-  @cache_creation_keys [:cache_creation, :cache_creation_input_tokens]
+  @cache_read_keys [
+    :cache_read_tokens,
+    :cached_tokens,
+    :cached_input,
+    :cache_read_input_tokens
+  ]
+  @cache_creation_keys [
+    :cache_write_tokens,
+    :cache_creation_tokens,
+    :cache_creation_input_tokens,
+    :cache_creation
+  ]
 
   @doc """
   Builds GenAI span start attributes from request lifecycle metadata.

@@ -152,6 +152,22 @@ defmodule ReqLLM.OpenTelemetry.AttributesTest do
       assert attributes["gen_ai.usage.cache_creation.input_tokens"] == 4_600
     end
 
+    test "counts canonical cache read and write token fields into input tokens" do
+      usage = %{
+        input_tokens: 3,
+        output_tokens: 250,
+        cache_read_tokens: 32_000,
+        cache_write_tokens: 4_600,
+        input_includes_cached: false
+      }
+
+      attributes = Attributes.terminal(%{operation: :chat, finish_reason: :stop, usage: usage})
+
+      assert attributes["gen_ai.usage.input_tokens"] == 36_603
+      assert attributes["gen_ai.usage.cache_read.input_tokens"] == 32_000
+      assert attributes["gen_ai.usage.cache_creation.input_tokens"] == 4_600
+    end
+
     test "keeps input tokens as reported when they already include the cache" do
       usage =
         ReqLLM.Usage.normalize(%{
